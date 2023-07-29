@@ -253,7 +253,7 @@ export function TreeView({
             }}
             type="button">
             {isPlaying ? 'Pause' : 'Play'}
-          </button>
+          </button>action-button-micaction-button-micaction-button-micaction-button-mic
           <input
             className={timeTravelPanelSliderClassName}
             ref={inputRef}

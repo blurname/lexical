@@ -185,11 +185,13 @@ export default function ActionsPlugin({
       </button>
       <button
         className="action-button export"
-        onClick={() =>
-          exportFile(editor, {
-            fileName: `Playground ${new Date().toISOString()}`,
-            source: 'Playground',
-          })
+        onClick={() =>{
+          console.log(editor.getEditorState().toJSON())
+          //exportFile(editor, {
+            //fileName: `Playground ${new Date().toISOString()}`,
+            //source: 'Playground',
+          //})
+          }
         }
         title="Export"
         aria-label="Export editor state to JSON">
