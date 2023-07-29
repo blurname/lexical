@@ -11,6 +11,7 @@ import {CharacterLimitPlugin} from '@lexical/react/LexicalCharacterLimitPlugin';
 import {CheckListPlugin} from '@lexical/react/LexicalCheckListPlugin';
 import {ClearEditorPlugin} from '@lexical/react/LexicalClearEditorPlugin';
 import LexicalClickableLinkPlugin from '@lexical/react/LexicalClickableLinkPlugin';
+import {LexicalComposer} from '@lexical/react/LexicalComposer';
 import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary';
 import {HistoryPlugin} from '@lexical/react/LexicalHistoryPlugin';
 import {HorizontalRulePlugin} from '@lexical/react/LexicalHorizontalRulePlugin';
@@ -19,6 +20,8 @@ import {PlainTextPlugin} from '@lexical/react/LexicalPlainTextPlugin';
 import {RichTextPlugin} from '@lexical/react/LexicalRichTextPlugin';
 import {TabIndentationPlugin} from '@lexical/react/LexicalTabIndentationPlugin';
 import useLexicalEditable from '@lexical/react/useLexicalEditable';
+import {createEditor} from 'packages/lexical/src';
+import {registerRichText} from 'packages/lexical-rich-text/src';
 import * as React from 'react';
 import {useEffect, useState} from 'react';
 import {CAN_USE_DOM} from 'shared/canUseDOM';
@@ -200,11 +203,36 @@ useEffect(() => {
       return dispatchPaste;
     }
     const dispatchPaste = paste();
-    dispatchPaste(editor, testText);
+    //dispatchPaste(editor, testText);
   }, 1000);
 }, [])
 
+
+// Get editor initial state (e.g. loaded from backend)
+const loadContent = () => {
+  // 'empty' editor
+  const value = '{"root":{"children":[{"children":[],"direction":null,"format":"","indent":0,"type":"paragraph","version":1}],"direction":null,"format":"","indent":0,"type":"root","version":1}}';
+
+  return value;
+}
+
+const initialEditorState = loadContent();
+function onError(error) {
+  console.error(error);
+}
+const config = {
+
+    editorState: initialEditorState,
+namespace: 'MyEditor',
+onError,
+theme:{}
+
+  }
+
+// Handler to store content (e.g. when user submits a form)
+
   return (
+    <LexicalComposer initialConfig={config}>
     <>
       {isRichText && <ToolbarPlugin />}
       <div
@@ -288,5 +316,6 @@ useEffect(() => {
       </div>
       {showTreeView && <TreeViewPlugin />}
     </>
+    </LexicalComposer>
   );
 }
