@@ -25,10 +25,8 @@ import {CAN_USE_DOM} from 'shared/canUseDOM';
 
 import {useSettings} from './context/SettingsContext';
 import {useSharedHistoryContext} from './context/SharedHistoryContext';
-import TableCellNodes from './nodes/TableCellNodes';
 import ActionsPlugin from './plugins/ActionsPlugin';
 import AutocompletePlugin from './plugins/AutocompletePlugin';
-import AutoEmbedPlugin from './plugins/AutoEmbedPlugin';
 import AutoLinkPlugin from './plugins/AutoLinkPlugin';
 import CodeHighlightPlugin from './plugins/CodeHighlightPlugin';
 import CollapsiblePlugin from './plugins/CollapsiblePlugin';
@@ -46,7 +44,6 @@ import TabFocusPlugin from './plugins/TabFocusPlugin';
 import TableOfContentsPlugin from './plugins/TableOfContentsPlugin';
 import ToolbarPlugin from './plugins/ToolbarPlugin';
 import TreeViewPlugin from './plugins/TreeViewPlugin';
-import PlaygroundEditorTheme from './themes/PlaygroundEditorTheme';
 import ContentEditable from './ui/ContentEditable';
 import Placeholder from './ui/Placeholder';
 
@@ -133,9 +130,6 @@ const testText = `
 揽𬴂辔以抗策，怅盘桓而不能去。
 `
 
-const skipCollaborationInit =
-  // @ts-ignore
-  window.parent != null && window.parent.frames.right === window;
 
 export default function Editor(): JSX.Element {
   const {historyState} = useSharedHistoryContext();
@@ -150,8 +144,6 @@ export default function Editor(): JSX.Element {
       showTreeView,
       showTableOfContents,
       shouldUseLexicalContextMenu,
-      tableCellMerge,
-      tableCellBackgroundColor,
     },
   } = useSettings();
   const isEditable = useLexicalEditable();
@@ -161,25 +153,17 @@ export default function Editor(): JSX.Element {
     ? 'Enter some rich text...'
     : 'Enter some plain text...';
   const placeholder = <Placeholder>{text}</Placeholder>;
-  const [floatingAnchorElem, setFloatingAnchorElem] =
+  //const [floatingAnchorElem, setFloatingAnchorElem] =
     useState<HTMLDivElement | null>(null);
   const [isSmallWidthViewport, setIsSmallWidthViewport] =
     useState<boolean>(false);
 
   const onRef = (_floatingAnchorElem: HTMLDivElement) => {
-    if (_floatingAnchorElem !== null) {
-      setFloatingAnchorElem(_floatingAnchorElem);
-    }
+    //if (_floatingAnchorElem !== null) {
+      //setFloatingAnchorElem(_floatingAnchorElem);
+    //}
   };
 
-  const cellEditorConfig = {
-    namespace: 'Playground',
-    nodes: [...TableCellNodes],
-    onError: (error: Error) => {
-      throw error;
-    },
-    theme: PlaygroundEditorTheme,
-  };
 
   useEffect(() => {
     const updateViewPortWidth = () => {
