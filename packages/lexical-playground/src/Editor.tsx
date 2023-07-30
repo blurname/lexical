@@ -12,6 +12,7 @@ import {CheckListPlugin} from '@lexical/react/LexicalCheckListPlugin';
 import {ClearEditorPlugin} from '@lexical/react/LexicalClearEditorPlugin';
 import LexicalClickableLinkPlugin from '@lexical/react/LexicalClickableLinkPlugin';
 import {LexicalComposer} from '@lexical/react/LexicalComposer';
+import {useLexicalComposerContext} from '@lexical/react/LexicalComposerContext';
 import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary';
 import {HistoryPlugin} from '@lexical/react/LexicalHistoryPlugin';
 import {HorizontalRulePlugin} from '@lexical/react/LexicalHorizontalRulePlugin';
@@ -26,6 +27,7 @@ import * as React from 'react';
 import {useEffect, useState} from 'react';
 import {CAN_USE_DOM} from 'shared/canUseDOM';
 
+import {loadContent, loadContent2, loadContent3} from './const';
 import {useSettings} from './context/SettingsContext';
 import {useSharedHistoryContext} from './context/SharedHistoryContext';
 import ActionsPlugin from './plugins/ActionsPlugin';
@@ -208,31 +210,22 @@ useEffect(() => {
 }, [])
 
 
-// Get editor initial state (e.g. loaded from backend)
-const loadContent = () => {
-  // 'empty' editor
-  const value = '{"root":{"children":[{"children":[],"direction":null,"format":"","indent":0,"type":"paragraph","version":1}],"direction":null,"format":"","indent":0,"type":"root","version":1}}';
-
-  return value;
-}
-
-const initialEditorState = loadContent();
-function onError(error) {
-  console.error(error);
-}
-const config = {
-
-    editorState: initialEditorState,
-namespace: 'MyEditor',
-onError,
-theme:{}
-
+  const [editor] = useLexicalComposerContext();
+  useEffect(() => {
+  
+    //const json = JSON.parse(loadContent2());
+    const editorState = editor.parseEditorState(
+      JSON.stringify(loadContent3()),
+    );
+    editor.setEditorState(editorState);
+  return () => {
+    
   }
+}, [])
 
 // Handler to store content (e.g. when user submits a form)
 
   return (
-    <LexicalComposer initialConfig={config}>
     <>
       {isRichText && <ToolbarPlugin />}
       <div
@@ -316,6 +309,5 @@ theme:{}
       </div>
       {showTreeView && <TreeViewPlugin />}
     </>
-    </LexicalComposer>
   );
 }
